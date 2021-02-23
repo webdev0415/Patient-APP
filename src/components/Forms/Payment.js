@@ -5,15 +5,19 @@ import {
   Col,
   Typography,
   Input,
+  Select
 } from "antd";
 import { PaymentCard } from 'react-ui-cards';
+import Cards from 'react-credit-cards';
+import 'react-credit-cards/es/styles-compiled.css';
 const { Title, Text } = Typography;
 function Payment(props) {
   const [state, setState] = useState({
     name:'',
     number: '',
-    validthru: '',
-    cvv: '',
+    expiry: '',
+    cvc: '',
+    focus:'',
   });
   const handleChange = (e) => {
     setState({
@@ -22,6 +26,12 @@ function Payment(props) {
     });
     console.log(e.target.name);
   };
+  const handleFocus = (e) => {
+    setState({
+      ...state,
+      focus: e.target.name,
+    })
+  }
   const onFinish = (values) => {
     console.log("Success:", values);
   };
@@ -49,49 +59,86 @@ function Payment(props) {
           style={{ color: "maroon", fontSize: 18, fontWeight: 600 }}
           align="middle"
         >
-          <Col xs={{ span: 24 }} lg={{ span: 12 }}>
-            <p>Number<Text style={{ fontSize: 12 }} type="danger">{" (Required)"}</Text></p>
+          <Col xs={{ span: 24 }} lg={{ span: 8 }} >
+            <div id="PaymentForm">
+              <Cards
+                cvc={state.cvc}
+                expiry={state.expiry}
+                focused={state.focus}
+                name={state.name}
+                number={state.number}
+                preview={true}
+                issuer="visa"
+              />
+            </div>
+          </Col>
+          <Col xs={{ span: 24 }} lg={{ span: 8 }} style={{paddingTop:10}}>
             <Input
-              className="mb"
               value={state.number}
               name="number"
               onChange={handleChange}
-              placeholder="0000 0000 0000 0000"
+              onFocus={handleFocus}
+              placeholder="Number"
+              style={{marginBottom:40}}
             />
-            <p>Name<Text style={{ fontSize: 12 }} type="danger">{" (Required)"}</Text></p>
             <Input
-              className="mb"
               value={state.name}
               name="name"
               onChange={handleChange}
-              placeholder="Jonh Smith"
+              placeholder="Name"
+              style={{marginBottom:40}}
             />
-            <p>Valid Thru<Text style={{ fontSize: 12 }} type="danger">{" (Required)"}</Text></p>
-            <Input
-              className="mb"
-              value={state.validthru}
-              name="validthru"
-              onChange={handleChange}
-              placeholder="12/18"
-            />
-            <p>CVV<Text style={{ fontSize: 12 }} type="danger">{" (Required)"}</Text></p>
-            <Input
-              className="mb"
-              value={state.cvv}
-              name="cvv"
-              onChange={handleChange}
-              placeholder="123"
-            />
+            <div className="flex">
+              <Input
+                className="mb"
+                value={state.expiry}
+                name="expiry"
+                onChange={handleChange}
+                placeholder="Valid Thru"
+                style={{width:"70%", marginRight:10}}
+              />
+              <Input
+                className="mb"
+                value={state.cvc}
+                name="cvc"
+                onChange={handleChange}
+                placeholder="CVC"
+                style={{width:"30%"}}
+              />
+            </div>
+            
           </Col>
-          <Col xs={{ span: 24 }} lg={{ span: 12 }} >
-            <PaymentCard
-              background="linear-gradient(135deg, #00b4db, #0083b0)"
-              backgroundPattern="worldMap"
-              number={state.number}
-              date={state.validthru}
-              name={state.name}
-              cvv={state.cvv}
+          <Col xs={{ span: 24 }} lg={{ span: 8 }} style={{paddingTop:10,borderLeft:"1px solid grey"}} >
+            <Input
+              value={state.addressFirst}
+              name="addressFirst"
+              onChange={handleChange}
+              placeholder="Address Line 1"
+              style={{ marginBottom:40 }}
             />
+            <Input
+              value={state.addressSec}
+              name="addressSec"
+              onChange={handleChange}
+              placeholder="Address Line 2"
+              style={{marginBottom:40}}
+            />
+            <div className="flex" >
+              <Input className="mb" value={state.city} name="city" onChange={handleChange} style={{ width:"40%", marginRight:10 }} placeholder="city" />
+              <Select
+                style={{ width:"40%", marginRight:10 }}
+                mode="single"
+                placeholder="state"
+                name="state"
+                value={state.state}      
+              >
+                {/* {phoneType.map((item, index) => {
+                  return <Select.Option key={index}>{item}</Select.Option>;
+                })} */}
+              </Select>
+              <Input className="mb" value={state.zipCode} name="zipCode" onChange={handleChange} style={{ width:"20%" }} placeholder="Zip Code" />
+            </div>
+                
           </Col>
         </Row>
       </Form>
