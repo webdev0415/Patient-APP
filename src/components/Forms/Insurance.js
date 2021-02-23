@@ -7,9 +7,11 @@ import {
   Input,
   Image,
   Upload,
-  Button
+  Button,
+  Modal
 } from "antd";
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, CameraOutlined } from '@ant-design/icons';
+// import camera from './camera';
 const { Title } = Typography;
 function Insurance(props) {
   const [state, setState] = useState({
@@ -55,6 +57,46 @@ function Insurance(props) {
   useEffect(() => {
     props.onChange({insurance: state});
   }, [state]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    takeSnapshot();
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+  const [photo, setPhoto] = useState({
+    video: null,
+    canvas: null,
+    context: null,
+  })
+  const startCamera = () => {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        showModal();
+        setPhoto({
+          video : document.getElementById('video'),
+          canvas : document.getElementById('canvas'),
+          context : document.getElementById('canvas').getContext('2d')
+        });
+        (function (video) {
+            navigator.mediaDevices.getUserMedia({video: true}).then(function (stream) {
+                video.srcObject = stream;
+                video.play();
+            });
+        })(photo.video)
+    }
+  }
+  const takeSnapshot = () => {
+    photo.context.drawImage(photo.video, 0, 0, 680, 480);
+    const url = document.getElementById('canvas').toDataURL();
+    setState({...state, previewImage: url});
+  }
   return (
     <div style={{ padding: "30px 100px" }}>
       <Form
@@ -83,7 +125,9 @@ function Insurance(props) {
               showUploadList={false}
             >
               <Button icon={<PlusOutlined />}>Upload</Button>
-            </Upload>
+              
+            </Upload>{'\t'}<Button icon={<CameraOutlined />} onClick = {startCamera}>Take a photo</Button>
+            {/* <Button onClick = {() => camera.takeSnapshot()}>snap</Button> */}
           </Col>
           <Col xs={{ span: 24 }} lg={{ span: 12 }} style={{borderLeft:"1px solid grey"}} >
             <p>Provider</p>
@@ -121,6 +165,11 @@ function Insurance(props) {
           </Col>
         </Row>
       </Form>
+      <Modal title="Take a snapshot" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <video id="video" width={"100%"} autoPlay></video>
+        <canvas id="canvas" width={680} height={480} style={{display:"none"}}></canvas>
+      </Modal>
+
     </div>
   );
 }
