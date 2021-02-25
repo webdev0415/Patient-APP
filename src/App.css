@@ -45,3 +45,10 @@
   display: flex !important;
   height: 100% !important;
 }
+
+video {
+  width: 100% !important;
+}
+div.react-html5-camera-photo img {
+  width: 100% !important;
+}
