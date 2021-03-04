@@ -89,87 +89,76 @@ const SignIn = () => {
 	    }
 	}
 	return (
-		<div className={classNames(classes.login_wraper)}>
-			<Helmet>
-		        <title>SignIn</title>
-		        <meta name="description" content="Patient-App Login" />
-		    </Helmet>
-			<Form
-		      name="normal_login"
-		      className={classNames(classes.login_form)}
-		      initialValues={{ remember: true }}
-		      onFinish={onSubmit}
-		      layout="vertical"
-		    >
-		    <LogoComponent width="70%"/>
-		    <Paragraph className={classNames(classes.desc)}>Welcome to digital front door!</Paragraph>
-		    {!isOtpSent ? (
-              <Paragraph className={classNames(classes.desc)}>
-                Where we will help your doctor out by providing necessary information to have successfull visit
-              </Paragraph>
-            ) : (
-              <Paragraph className={classNames(classes.desc)}>
-                Please enter your one time password to proceed with registration process.
-              </Paragraph>
-            )}	
-            {!isOtpSent ? (
-            	<Form.Item
-			        name="loginID"
-			        label="E-mail or Phone"
-			        rules={[
-			          {
-			            required: true,
-			            message: 'Please input your E-mail or Phone!',
-			          },
-			        ]}
+		<div className={classNames(classes.all)}>
+			
+			<div className={classNames(classes.login_wraper)}>
+				<Helmet>
+			        <title>SignIn</title>
+			        <meta name="description" content="Patient-App Login" />
+			    </Helmet>
+				<Form
+			      name="normal_login"
+			      className={classNames(classes.login_form)}
+			      initialValues={{ remember: true }}
+			      onFinish={onSubmit}
+			      layout="vertical"
 			    >
-			        <Input placeholder="E-mail or Phone" id="loginID"/>
-			    </Form.Item>
-            ) : (
-            	<Form.Item 
-			    	name="code"
-			    	rules={[
-			    		{
-			    	        required: isOtpSent,
-			    	        message: 'Please input the password	code!',
-			    	        whitespace: true,
-			    	    },
-			    	]}
-			    >
-			        <OtpInput
-			            value={otpValue}
-			            onChange={otpValue => setOtpValue(otpValue)}
-			            numInputs={6}
-			            separator={<span>-</span>}
-			            containerStyle={classNames(classes.otp_container_styles)}
-			            inputStyle={classNames(classes.otp_input_styles)}
-			        />
-			    </Form.Item>
-            )}
-            {!isOtpSent && (
-            	<Form.Item name="remember" valuePropName="checked" noStyle>
-			        <Checkbox>Remember me</Checkbox>
-			    </Form.Item>
-            	)
-
-            }
-			    <Form.Item>
-				    <Button type="primary" htmlType="submit" className={classNames(classes.login_form_button)}>
-			        	{!isOtpSent && !isLoading && "Sign In" }
-			        	{isOtpSent && !isLoading && "Verify"}
-			        	<ClipLoader color="#ffffff" loading={isLoading}  size={30} /> 
-			        </Button>
-			        {!isOtpSent && (
-			        	<div>
-			        	<Paragraph>
-			        		By continuing, you agree to our <Link to="#">Conditions of Use</Link> and <Link to="#">Privacy Notice</Link>.
-			        	</Paragraph>
-			        	<Divider />
-			        	</div>
-			        )}
-				    
-				</Form.Item>
-			</Form>
+			    <Paragraph className={classNames(classes.logo)}>Logo</Paragraph>
+			    <Paragraph className={classNames(classes.wel_text)}>Welcome to your Digital Front door!</Paragraph>
+			    {!isOtpSent ? (
+	              <Paragraph className={classNames(classes.desc)}>
+	                Where you will help your doctor out by providing the necessary information to have a <strong>successful visit</strong>
+	              </Paragraph>
+	            ) : (
+	              <Paragraph className={classNames(classes.desc)}>
+	                Please enter your one time password to proceed with registration process.
+	              </Paragraph>
+	            )}	
+	            {!isOtpSent ? (
+	            	<Form.Item
+				        name="loginID"
+				        rules={[
+				          {
+				            required: true,
+				            message: 'Please input your Mobile Phone!',
+				          },
+				        ]}
+				    >
+				        <Input placeholder="Enter Your Mobile Number" id="loginID"/>
+				    </Form.Item>
+	            ) : (
+	            	<Form.Item 
+				    	name="code"
+				    	rules={[
+				    		{
+				    	        required: isOtpSent,
+				    	        message: 'Please input the password	code!',
+				    	        whitespace: true,
+				    	    },
+				    	]}
+				    >
+				        <OtpInput
+				            value={otpValue}
+				            onChange={otpValue => setOtpValue(otpValue)}
+				            numInputs={6}
+				            separator={<span>-</span>}
+				            containerStyle={classNames(classes.otp_container_styles)}
+				            inputStyle={classNames(classes.otp_input_styles)}
+				        />
+				    </Form.Item>
+	            )}
+				    <Form.Item>
+					    <Button type="primary" htmlType="submit" className={classNames(classes.login_form_button)}>
+				        	{!isOtpSent && !isLoading && "Submit" }
+				        	{isOtpSent && !isLoading && "Verify"}
+				        	<ClipLoader color="#ffffff" loading={isLoading}  size={30} /> 
+				        </Button>				    
+					</Form.Item>
+				</Form>
+			</div>
+			<div className={classNames(classes.image)}>
+				<LogoComponent />
+			</div>
 		</div>
 		)
 }
